@@ -1,4 +1,6 @@
 const userModel = require("../models/user.model")
+const bcrypt = require("bcryptjs")
+const jwt = require("jsonwebtoken")
 
 /**
  * @name = registerUserController
@@ -24,6 +26,14 @@ async function registerUserController(req, res) {
             message: "Account already exists with this email address or username" 
         })
     }
+
+    const hash = await bcrypt.hash(password, 10)
+
+    const user = await userModel.create({
+        username,
+        email,
+        password: hash
+    })
 }
 
 module.exports = {
